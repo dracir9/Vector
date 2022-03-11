@@ -83,20 +83,24 @@ Mat4 Mat4::operator*(const Mat4& m) const
 
 Mat4 Mat4::operator!() const
 {
-    Mat4 xp;
-    xp.data[0][1] = data[1][0];
-    xp.data[0][2] = data[2][0];
-    xp.data[0][3] = data[3][0];
-    xp.data[1][0] = data[0][1];
-    xp.data[1][2] = data[2][1];
-    xp.data[1][3] = data[3][1];
-    xp.data[2][0] = data[0][2];
-    xp.data[2][1] = data[1][2];
-    xp.data[2][3] = data[3][2];
-    xp.data[3][0] = data[0][3];
-    xp.data[3][1] = data[1][3];
-    xp.data[3][2] = data[2][3];
-    return xp;
+    Mat4 m;
+    m.data[0][0] = data[0][0];
+    m.data[0][1] = data[1][0];
+    m.data[0][2] = data[2][0];
+    m.data[0][3] = data[3][0];
+    m.data[1][0] = data[0][1];
+    m.data[1][1] = data[1][1];
+    m.data[1][2] = data[2][1];
+    m.data[1][3] = data[3][1];
+    m.data[2][0] = data[0][2];
+    m.data[2][1] = data[1][2];
+    m.data[2][2] = data[2][2];
+    m.data[2][3] = data[3][2];
+    m.data[3][0] = data[0][3];
+    m.data[3][1] = data[1][3];
+    m.data[3][2] = data[2][3];
+    m.data[3][3] = data[3][3];
+    return m;
 }
 
 Mat4 Mat4::RotationZ(float theta)

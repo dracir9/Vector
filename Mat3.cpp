@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 2021-11-17
+ * Last Modified: 11-03-2022
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -77,14 +77,17 @@ Mat3 Mat3::operator*(const Mat3& m) const
 
 Mat3 Mat3::operator!() const
 {
-    Mat3 xp;
-    xp.data[0][1] = data[1][0];
-    xp.data[0][2] = data[2][0];
-    xp.data[1][0] = data[0][1];
-    xp.data[1][2] = data[2][1];
-    xp.data[2][0] = data[0][2];
-    xp.data[2][1] = data[1][2];
-    return xp;
+    Mat3 m;
+    m.data[0][0] = data[0][0];
+    m.data[0][1] = data[1][0];
+    m.data[0][2] = data[2][0];
+    m.data[1][0] = data[0][1];
+    m.data[1][1] = data[1][1];
+    m.data[1][2] = data[2][1];
+    m.data[2][0] = data[0][2];
+    m.data[2][1] = data[1][2];
+    m.data[2][2] = data[2][2];
+    return m;
 }
 
 Mat3 Mat3::RotationZ(float theta)
@@ -93,7 +96,7 @@ Mat3 Mat3::RotationZ(float theta)
     const float cosTheta = cosf(theta);
 
     return {
-            cosTheta, sinTheta, 0.0f,
+        cosTheta,  sinTheta, 0.0f,
         -sinTheta, cosTheta, 0.0f,
         0.0f,      0.0f,     1.0f,
     };
@@ -105,9 +108,9 @@ Mat3 Mat3::RotationY(float theta)
     const float cosTheta = cosf(theta);
 
     return {
-            cosTheta, 0.0f, -sinTheta,
-            0.0f,     1.0f, 0.0f,
-            sinTheta, 0.0f, cosTheta
+        cosTheta, 0.0f, -sinTheta,
+        0.0f,     1.0f, 0.0f,
+        sinTheta, 0.0f, cosTheta
     };
 }
 
@@ -117,8 +120,8 @@ Mat3 Mat3::RotationX(float theta)
     const float cosTheta = cosf(theta);
 
     return {
-        1.0f, 0.0f,     0.0f,
-        0.0f, cosTheta, sinTheta,
-        0.0f,-sinTheta, cosTheta,
+        1.0f,  0.0f,     0.0f,
+        0.0f,  cosTheta, sinTheta,
+        0.0f, -sinTheta, cosTheta,
     };
 }
