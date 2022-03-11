@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-15
  * -----
- * Last Modified: 2021-11-17
+ * Last Modified: 11-03-2022
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -28,7 +28,6 @@
 
 #include "Mat4.h"
 #include <cmath>
-#include <cassert>
 #include <cstring>
 
 Mat4& Mat4::operator=(const Mat4& m)
