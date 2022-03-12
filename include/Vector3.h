@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-13
  * -----
- * Last Modified: 2021-11-17
+ * Last Modified: 12-03-2022
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -166,7 +166,7 @@ public:
     }
     //******************************************************************
 
-    T z;
+    T z = 0;
 };
 
 //**********************************************************************

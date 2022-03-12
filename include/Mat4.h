@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 11-03-2022
+ * Last Modified: 12-03-2022
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -38,13 +38,13 @@ public:
     Mat4() = default;
 
     constexpr Mat4(const float a11, const float a12, const float a13, const float a14
-        , const float a21, const float a22, const float a23, const float a24
-        , const float a31, const float a32, const float a33, const float a34
-        , const float a41, const float a42, const float a43, const float a44) :
+                 , const float a21, const float a22, const float a23, const float a24
+                 , const float a31, const float a32, const float a33, const float a34
+                 , const float a41, const float a42, const float a43, const float a44) :
         data { a11, a12, a13, a14,
                a21, a22, a23, a24,
                a31, a32, a33, a34,
-               a41, a42, a43, a44}
+               a41, a42, a43, a44 }
     {}
 
     Mat4(const Mat3& m)
@@ -172,7 +172,7 @@ public:
     
 public:
     // [ row ][ col ]
-    float data[4][4];
+    float data[4][4] = {0};
 };
 
 template<typename T>

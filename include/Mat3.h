@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 2021-11-17
+ * Last Modified: 12-03-2022
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -34,6 +34,16 @@
 class Mat3
 {
 public:
+    Mat3() = default;
+
+    constexpr Mat3(const float a11, const float a12, const float a13
+                 , const float a21, const float a22, const float a23
+                 , const float a31, const float a32, const float a33) :
+        data { a11, a12, a13,
+               a21, a22, a23,
+               a31, a32, a33 }
+    {}
+
     Mat3& operator=(const Mat3& m);
 
     Mat3& operator*=(float scalar);
@@ -72,7 +82,7 @@ public:
 
 public:
 	// [ row ][ col ]
-	float data[3][3];
+	float data[3][3] = {0};
 };
 
 template<typename T>
