@@ -1,9 +1,9 @@
 /**
- * @file: Mat3.cpp
+ * @file: Mat3.h
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 12-03-2022
+ * Last Modified: 16-05-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -20,10 +20,6 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * -----
- * HISTORY:
- * Date      	By	Comments
- * ----------	---	---------------------------------------------------------
  */
 
 #ifndef MATRIX3_H
