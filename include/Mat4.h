@@ -31,7 +31,8 @@
 class Mat4
 {
 public:
-    Mat4() = default;
+    constexpr Mat4() = default;
+    constexpr Mat4(const Mat4&) = default;
 
     constexpr Mat4(const float a11, const float a12, const float a13, const float a14
                  , const float a21, const float a22, const float a23, const float a24
