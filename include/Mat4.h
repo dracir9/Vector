@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 16-05-2023
+ * Last Modified: 29-05-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -27,8 +27,9 @@
 
 #include "Vector4.h"
 #include "Mat3.h"
+#include "esp_err.h"
 
-class Mat4
+class alignas(32) Mat4
 {
 public:
     constexpr Mat4() = default;
@@ -188,5 +189,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
         v.x * m.data[0][3] + v.y * m.data[1][3] + v.z * m.data[2][3] + v.w * m.data[3][3]
     };
 }
+
+extern "C" esp_err_t mult_4x4x4_asm(Mat4* A, Mat4* B, Mat4* C);
 
 #endif // MATRIX4_H
