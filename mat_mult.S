@@ -30,7 +30,7 @@
     .global mult_4x4x4_asm
     .type   mult_4x4x4_asm,@function
 
-// esp_err_t mult_4x4x4_asm(Mat4* A, Mat4* B, Mat4* C);
+// esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
 mult_4x4x4_asm: 
     entry	a1, 16
 // A - a2
@@ -156,7 +156,7 @@ mult_4x4x4_asm:
     .global mult_1x4x4_asm
     .type   mult_1x4x4_asm,@function
 
-// esp_err_t mult_1x4x4_asm(const Vector4<float>* v, const Mat4* m, Vector4<float>* C);
+// mult_1x4x4_asm(const float* v, const float* m, const float* C);
 mult_1x4x4_asm: 
     entry	a1, 16
 // v - a2

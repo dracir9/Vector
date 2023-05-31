@@ -173,6 +173,10 @@ public:
     float data[4][4] = {0};
 };
 
+// ASM functions
+extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
+extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* m, const float* C);
+
 template<typename T>
 Vector4<T>& operator*=(Vector4<T>& v, const Mat4& m)
 {
@@ -190,7 +194,14 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
     };
 }
 
-extern "C" esp_err_t mult_4x4x4_asm(const Mat4* A, const Mat4* B, Mat4* C);
-extern "C" esp_err_t mult_1x4x4_asm(const Vector4<float>* v, const Mat4* m, Vector4<float>* C);
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+template<>
+inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
+{
+    Vector4<float> u;
+    mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&u);
+    return u;
+}
+#endif
 
 #endif // MATRIX4_H
