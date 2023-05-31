@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 29-05-2023
+ * Last Modified: 31-05-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -190,6 +190,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
     };
 }
 
-extern "C" esp_err_t mult_4x4x4_asm(Mat4* A, Mat4* B, Mat4* C);
+extern "C" esp_err_t mult_4x4x4_asm(const Mat4* A, const Mat4* B, Mat4* C);
+extern "C" esp_err_t mult_1x4x4_asm(const Vector4<float>* v, const Mat4* m, Vector4<float>* C);
 
 #endif // MATRIX4_H
