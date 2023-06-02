@@ -3,7 +3,7 @@
  * @author Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 23-05-2023
  * -----
- * Last Modified: 31-05-2023
+ * Last Modified: 02-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2023 Ricard Bitriá Ribes
@@ -22,7 +22,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "sdkconfig.h"
 
+#ifdef CONFIG_IDF_TARGET_ESP32S3
 
 // Matrix multipliction functions for ESP32-S3 processor.
     .text
@@ -152,6 +154,8 @@ mult_4x4x4_asm:
 
 // END
 
+
+// Vector * Matrix
     .align 4
     .global mult_1x4x4_asm
     .type   mult_1x4x4_asm,@function
@@ -192,3 +196,6 @@ mult_1x4x4_asm:
 
     movi.n	a2, 0 // return status ESP_OK
     retw.n
+// END
+
+#endif

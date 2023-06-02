@@ -174,8 +174,10 @@ public:
 };
 
 // ASM functions
+#ifdef CONFIG_IDF_TARGET_ESP32S3
 extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
 extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* m, const float* C);
+#endif
 
 template<typename T>
 Vector4<T>& operator*=(Vector4<T>& v, const Mat4& m)
