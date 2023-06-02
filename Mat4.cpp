@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-15
  * -----
- * Last Modified: 31-05-2023
+ * Last Modified: 02-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -28,12 +28,30 @@
 
 Mat4& Mat4::operator=(const Mat4& m)
 {
-    memcpy(data, m.data, sizeof(data));
+    data[0][0] = m.data[0][0];
+    data[0][1] = m.data[0][1];
+    data[0][2] = m.data[0][2];
+    data[0][3] = m.data[0][3];
+    data[1][0] = m.data[1][0];
+    data[1][1] = m.data[1][1];
+    data[1][2] = m.data[1][2];
+    data[1][3] = m.data[1][3];
+    data[2][0] = m.data[2][0];
+    data[2][1] = m.data[2][1];
+    data[2][2] = m.data[2][2];
+    data[2][3] = m.data[2][3];
+    data[3][0] = m.data[3][0];
+    data[3][1] = m.data[3][1];
+    data[3][2] = m.data[3][2];
+    data[3][3] = m.data[3][3];
     return *this;
 }
 
 Mat4& Mat4::operator*=(float scalar)
 {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    mult_1x4xS_asm(&data[0][0], &scalar, &data[0][0]);
+#else
     for(auto& row : data)
     {
         for(float& e : row)
@@ -41,6 +59,7 @@ Mat4& Mat4::operator*=(float scalar)
             e *= scalar;
         }
     }
+#endif
     return *this;
 }
 
@@ -52,7 +71,12 @@ Mat4 Mat4::operator*(float scalar) const
 
 Mat4& Mat4::operator*=(const Mat4& m)
 {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    mult_4x4x4_asm(&data[0][0], &m.data[0][0], &data[0][0]);
+    return *this;
+#else
     return *this = *this * m;
+#endif
 }
 
 Mat4 Mat4::operator*(const Mat4& m) const

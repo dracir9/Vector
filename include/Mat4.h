@@ -45,19 +45,12 @@ public:
                a41, a42, a43, a44 }
     {}
 
-    Mat4(const Mat3& m)
-    {
-        data[0][0] = m.data[0][0];
-        data[0][1] = m.data[0][1];
-        data[0][2] = m.data[0][2];
-        data[1][0] = m.data[1][0];
-        data[1][1] = m.data[1][1];
-        data[1][2] = m.data[1][2];
-        data[2][0] = m.data[2][0];
-        data[2][1] = m.data[2][1];
-        data[2][2] = m.data[2][2];
-        data[3][3] = 1.0f;
-    }
+    constexpr Mat4(const Mat3& m) :
+        data { m.data[0][0], m.data[0][1], m.data[0][2], 0.0f,
+               m.data[1][0], m.data[1][1], m.data[1][2], 0.0f,
+               m.data[2][0], m.data[2][1], m.data[2][2], 0.0f,
+                       0.0f,         0.0f,         0.0f, 1.0f }
+    {}
 
     Mat4& operator=(const Mat4& m);
 
@@ -176,7 +169,8 @@ public:
 // ASM functions
 #ifdef CONFIG_IDF_TARGET_ESP32S3
 extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
-extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* m, const float* C);
+extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* M, const float* u);
+extern "C" esp_err_t mult_1x4xS_asm(const float* A, const float* s, const float* C);
 #endif
 
 template<typename T>
