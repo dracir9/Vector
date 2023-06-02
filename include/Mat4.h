@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 31-05-2023
+ * Last Modified: 02-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -29,7 +29,7 @@
 #include "Mat3.h"
 #include "esp_err.h"
 
-class alignas(32) Mat4
+class alignas(16) Mat4
 {
 public:
     constexpr Mat4() = default;

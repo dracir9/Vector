@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 16-05-2023
+ * Last Modified: 02-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -33,7 +33,7 @@
 //* 4 dimensional vector (X,Y,Z,W)
 //**********************************************************************
 template <class T>
-class Vector4 : public Vector3<T>
+class alignas(sizeof(T)*4) Vector4 : public Vector3<T>
 {
 public:
     using Vector3<T>::x;
