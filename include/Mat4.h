@@ -168,9 +168,9 @@ public:
 
 // ASM functions
 #ifdef CONFIG_IDF_TARGET_ESP32S3
-extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
-extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* M, const float* u);
-extern "C" esp_err_t mult_4x4xS_asm(const float* A, const float* s, const float* C);
+extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, float* C);
+extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* M, float* u);
+extern "C" esp_err_t mult_4x4xS_asm(const float* A, const float* s, float* C);
 #endif
 
 template<typename T>
