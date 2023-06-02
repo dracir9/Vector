@@ -200,11 +200,11 @@ mult_1x4x4_asm:
 
 // Matrix * scalar
     .align 4
-    .global mult_1x4xS_asm
-    .type   mult_1x4xS_asm,@function
+    .global mult_4x4xS_asm
+    .type   mult_4x4xS_asm,@function
 
-// esp_err_t mult_1x4xS_asm(const float* A, const float* s, const float* C);
-mult_1x4xS_asm: 
+// esp_err_t mult_4x4xS_asm(const float* A, const float* s, const float* C);
+mult_4x4xS_asm: 
     entry	a1, 16
 // A - a2
 // s - a3

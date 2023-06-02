@@ -50,7 +50,7 @@ Mat4& Mat4::operator=(const Mat4& m)
 Mat4& Mat4::operator*=(float scalar)
 {
 #ifdef CONFIG_IDF_TARGET_ESP32S3
-    mult_1x4xS_asm(&data[0][0], &scalar, &data[0][0]);
+    mult_4x4xS_asm(&data[0][0], &scalar, &data[0][0]);
 #else
     for(auto& row : data)
     {
@@ -65,8 +65,15 @@ Mat4& Mat4::operator*=(float scalar)
 
 Mat4 Mat4::operator*(float scalar) const
 {
+    Mat4 result;
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    mult_4x4xS_asm(&data[0][0], &scalar, &result.data[0][0]);
+    
+#else
     Mat4 result = *this;
-    return result *= scalar;
+    result *= scalar;
+#endif
+    return result;
 }
 
 Mat4& Mat4::operator*=(const Mat4& m)
