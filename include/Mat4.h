@@ -205,6 +205,13 @@ inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
     mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&u);
     return u;
 }
+
+template<>
+inline Vector4<float>& operator*=(Vector4<float>& v, const Mat4& m)
+{
+    mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&v);
+    return v;
+}
 #endif
 
 #endif // MATRIX4_H
