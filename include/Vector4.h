@@ -33,7 +33,7 @@
 //* 4 dimensional vector (X,Y,Z,W)
 //**********************************************************************
 template <class T>
-class alignas(sizeof(T)*4) Vector4 : public Vector3<T>
+class alignas((sizeof(T)*4) > 16 ? 16 : (sizeof(T)*4)) Vector4 : public Vector3<T>
 {
 public:
     using Vector3<T>::x;
