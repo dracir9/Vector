@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-15
  * -----
- * Last Modified: 02-06-2023
+ * Last Modified: 03-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -28,6 +28,21 @@
 
 Mat4& Mat4::operator=(const Mat4& m)
 {
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    asm(R"(
+        EE.VLD.128.IP q0, a3, 16
+        EE.VST.128.IP q0, a2, 16
+
+        EE.VLD.128.IP q0, a3, 16
+        EE.VST.128.IP q0, a2, 16
+
+        EE.VLD.128.IP q0, a3, 16
+        EE.VST.128.IP q0, a2, 16
+
+        EE.VLD.128.IP q0, a3, -48
+        EE.VST.128.IP q0, a2, -48
+    )");
+#else
     data[0][0] = m.data[0][0];
     data[0][1] = m.data[0][1];
     data[0][2] = m.data[0][2];
@@ -44,6 +59,7 @@ Mat4& Mat4::operator=(const Mat4& m)
     data[3][1] = m.data[3][1];
     data[3][2] = m.data[3][2];
     data[3][3] = m.data[3][3];
+#endif
     return *this;
 }
 
