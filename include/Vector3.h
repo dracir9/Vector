@@ -41,10 +41,10 @@ public:
     //******************************************************************
     //* Constructors
     //******************************************************************
-    // Default sets all components to zero.
-    //------------------------------------------------------------------
     Vector3() = default;
     constexpr Vector3(T x, T y, T z) : Vector2<T>::Vector2(x, y), z(z) {}
+
+    constexpr Vector3(const T &s) : Vector2<T>::Vector2(s), z(s) {}
 
     template <class U>
     constexpr Vector3(const Vector3<U> &v) : Vector2<T>::Vector2(v.x, v.y), z(v.z) {}
@@ -162,7 +162,7 @@ public:
     }
     //******************************************************************
 
-    T z = 0;
+    T z;
 };
 
 //**********************************************************************
