@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 02-06-2023
+ * Last Modified: 03-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -32,8 +32,15 @@
 class alignas(16) Mat4
 {
 public:
-    constexpr Mat4() = default;
+    Mat4() = default;
     constexpr Mat4(const Mat4&) = default;
+    
+    constexpr Mat4(const float s) :
+        data { s, s, s, s,
+               s, s, s, s,
+               s, s, s, s,
+               s, s, s, s }
+    {}
 
     constexpr Mat4(const float a11, const float a12, const float a13, const float a14
                  , const float a21, const float a22, const float a23, const float a24
@@ -163,7 +170,7 @@ public:
     
 public:
     // [ row ][ col ]
-    float data[4][4] = {0};
+    float data[4][4];
 };
 
 // ASM functions
