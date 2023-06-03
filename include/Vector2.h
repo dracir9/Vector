@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-13
  * -----
- * Last Modified: 16-05-2023
+ * Last Modified: 03-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -42,7 +42,7 @@ public:
     constexpr Vector2(T x, T y) : x(x), y(y) {}
 
     template <class U>
-    Vector2(const Vector2<U> &v) : x(v.x), y(v.y) {}
+    constexpr Vector2(const Vector2<U> &v) : x(v.x), y(v.y) {}
     //******************************************************************
 
     //******************************************************************

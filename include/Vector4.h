@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 02-06-2023
+ * Last Modified: 03-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -45,13 +45,13 @@ public:
     // Default sets all components to zero.
     //------------------------------------------------------------------
     Vector4() = default;
-    Vector4(T x, T y, T z, T w) : Vector3<T>::Vector3(x, y, z), w(w) {}
+    constexpr Vector4(T x, T y, T z, T w) : Vector3<T>::Vector3(x, y, z), w(w) {}
 
     template <class U>
-    Vector4(const Vector4<U> &v) : Vector3<T>::Vector3(v.x, v.y, v.z), w(v.w) {}
+    constexpr Vector4(const Vector4<U> &v) : Vector3<T>::Vector3(v.x, v.y, v.z), w(v.w) {}
 
     template <class U>
-    Vector4(const Vector3<U> &v, T w = 1) : Vector3<T>::Vector3(v), w(w) {}
+    constexpr Vector4(const Vector3<U> &v, T w = 1) : Vector3<T>::Vector3(v), w(w) {}
     //******************************************************************
 
     //******************************************************************

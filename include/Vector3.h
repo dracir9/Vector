@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-13
  * -----
- * Last Modified: 16-05-2023
+ * Last Modified: 03-06-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -47,10 +47,10 @@ public:
     constexpr Vector3(T x, T y, T z) : Vector2<T>::Vector2(x, y), z(z) {}
 
     template <class U>
-    Vector3(const Vector3<U> &v) : Vector2<T>::Vector2(v.x, v.y), z(v.z) {}
+    constexpr Vector3(const Vector3<U> &v) : Vector2<T>::Vector2(v.x, v.y), z(v.z) {}
 
     template <class U>
-    Vector3(const Vector2<U> &v, T z) : Vector2<T>::Vector2(v), z(z) {}
+    constexpr Vector3(const Vector2<U> &v, T z) : Vector2<T>::Vector2(v), z(z) {}
     //******************************************************************
 
     //******************************************************************
