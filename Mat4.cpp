@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-15
  * -----
- * Last Modified: 03-06-2023
+ * Last Modified: 16-08-2023
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -86,7 +86,7 @@ Mat4 Mat4::operator*(float scalar) const
     mult_4x4xS_asm(&data[0][0], &scalar, &result.data[0][0]);
     
 #else
-    Mat4 result = *this;
+    result = *this;
     result *= scalar;
 #endif
     return result;
@@ -124,7 +124,7 @@ Mat4 Mat4::operator*(const Mat4& m) const
     result.data[3][0] = data[3][0]*m.data[0][0] + data[3][1]*m.data[1][0] + data[3][2]*m.data[2][0] + data[3][3]*m.data[3][0];
     result.data[3][1] = data[3][0]*m.data[0][1] + data[3][1]*m.data[1][1] + data[3][2]*m.data[2][1] + data[3][3]*m.data[3][1];
     result.data[3][2] = data[3][0]*m.data[0][2] + data[3][1]*m.data[1][2] + data[3][2]*m.data[2][2] + data[3][3]*m.data[3][2];
-    result.data[3][3] = data[3][0]*m.data[0][3] + data[3][1]*m.data[1][3] + data[3][2]*m.data[2][3] + data[3][3]*m.data[3][3];ç
+    result.data[3][3] = data[3][0]*m.data[0][3] + data[3][1]*m.data[1][3] + data[3][2]*m.data[2][3] + data[3][3]*m.data[3][3];
 #endif
     return result;
 }
