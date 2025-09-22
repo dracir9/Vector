@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 03-06-2023
+ * Last Modified: 22-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -27,7 +27,6 @@
 
 #include "Vector4.h"
 #include "Mat3.h"
-#include "esp_err.h"
 
 class alignas(16) Mat4
 {
@@ -175,9 +174,9 @@ public:
 
 // ASM functions
 #ifdef CONFIG_IDF_TARGET_ESP32S3
-extern "C" esp_err_t mult_4x4x4_asm(const float* A, const float* B, float* C);
-extern "C" esp_err_t mult_1x4x4_asm(const float* v, const float* M, float* u);
-extern "C" esp_err_t mult_4x4xS_asm(const float* A, const float* s, float* C);
+extern "C" uint32_t mult_4x4x4_asm(const float* A, const float* B, float* C);
+extern "C" uint32_t mult_1x4x4_asm(const float* v, const float* M, float* u);
+extern "C" uint32_t mult_4x4xS_asm(const float* A, const float* s, float* C);
 #endif
 
 template<typename T>

@@ -3,7 +3,7 @@
  * @author Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 23-05-2023
  * -----
- * Last Modified: 02-06-2023
+ * Last Modified: 22-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2023 Ricard Bitriá Ribes
@@ -22,7 +22,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "sdkconfig.h"
+#if defined __has_include
+    #if __has_include ("sdkconfig.h")
+        #include "sdkconfig.h"
+    #endif
+#else
+    #include "sdkconfig.h"
+#endif
 
 #ifdef CONFIG_IDF_TARGET_ESP32S3
 
