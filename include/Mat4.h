@@ -201,7 +201,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
 template<>
 inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
 {
-    Vector4<float> u;
+    static Vector4<float> u;
     mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&u);
     return u;
 }

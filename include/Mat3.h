@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 16-05-2023
+ * Last Modified: 24-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -82,6 +82,13 @@ public:
 	float data[3][3] = {0};
 };
 
+// ASM functions
+#if defined(STM32F407xx)
+extern "C" void mult_3x3x3_asm(const float* A, const float* B, float* C);
+extern "C" void mult_1x3x3_asm(const float* v, const float* M, float* u);
+extern "C" void mult_3x3xS_asm(const float* A, const float* s, float* C);
+#endif
+
 template<typename T>
 Vector3<T>& operator*=(Vector3<T>& v, const Mat3& m)
 {
@@ -97,5 +104,22 @@ Vector3<T> operator*(const Vector3<T>& v, const Mat3& m)
 		v.x * m.data[0][2] + v.y * m.data[1][2] + v.z * m.data[2][2]
 	};
 }
+
+#if defined(STM32F407xx)
+template<>
+inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
+{
+    static Vector3<float> u;
+    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&u);
+    return u;
+}
+
+template<>
+inline Vector3<float>& operator*=(Vector3<float>& v, const Mat3& m)
+{
+    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&v);
+    return v;
+}
+#endif
 
 #endif // MATRIX3_H
