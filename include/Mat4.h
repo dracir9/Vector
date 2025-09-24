@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 22-09-2025
+ * Last Modified: 24-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -25,6 +25,7 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
+#include <stdint.h>
 #include "Vector4.h"
 #include "Mat3.h"
 
@@ -173,10 +174,10 @@ public:
 };
 
 // ASM functions
-#ifdef CONFIG_IDF_TARGET_ESP32S3
-extern "C" uint32_t mult_4x4x4_asm(const float* A, const float* B, float* C);
-extern "C" uint32_t mult_1x4x4_asm(const float* v, const float* M, float* u);
-extern "C" uint32_t mult_4x4xS_asm(const float* A, const float* s, float* C);
+#if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(STM32F407xx)
+extern "C" void mult_4x4x4_asm(const float* A, const float* B, float* C);
+extern "C" void mult_1x4x4_asm(const float* v, const float* M, float* u);
+extern "C" void mult_4x4xS_asm(const float* A, const float* s, float* C);
 #endif
 
 template<typename T>
@@ -196,7 +197,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
     };
 }
 
-#ifdef CONFIG_IDF_TARGET_ESP32S3
+#if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(STM32F407xx)
 template<>
 inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
 {

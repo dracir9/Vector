@@ -3,7 +3,7 @@
  * @author Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 23-05-2023
  * -----
- * Last Modified: 22-09-2025
+ * Last Modified: 23-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2023 Ricard Bitriá Ribes
@@ -26,8 +26,6 @@
     #if __has_include ("sdkconfig.h")
         #include "sdkconfig.h"
     #endif
-#else
-    #include "sdkconfig.h"
 #endif
 
 #ifdef CONFIG_IDF_TARGET_ESP32S3
@@ -38,8 +36,8 @@
     .global mult_4x4x4_asm
     .type   mult_4x4x4_asm,@function
 
-// esp_err_t mult_4x4x4_asm(const float* A, const float* B, const float* C);
-mult_4x4x4_asm: 
+// esp_err_t mult_4x4x4_asm(const float* A, const float* B, float* C);
+mult_4x4x4_asm:
     entry	a1, 16
 // A - a2
 // B - a3
@@ -166,7 +164,7 @@ mult_4x4x4_asm:
     .global mult_1x4x4_asm
     .type   mult_1x4x4_asm,@function
 
-// esp_err_t mult_1x4x4_asm(const float* v, const float* M, const float* u);
+// esp_err_t mult_1x4x4_asm(const float* v, const float* M, float* u);
 mult_1x4x4_asm: 
     entry	a1, 16
 // v - a2
@@ -209,7 +207,7 @@ mult_1x4x4_asm:
     .global mult_4x4xS_asm
     .type   mult_4x4xS_asm,@function
 
-// esp_err_t mult_4x4xS_asm(const float* A, const float* s, const float* C);
+// esp_err_t mult_4x4xS_asm(const float* A, const float* s, float* C);
 mult_4x4xS_asm: 
     entry	a1, 16
 // A - a2
