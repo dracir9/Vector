@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 24-09-2025
+ * Last Modified: 26-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -107,7 +107,7 @@ Vector3<T> operator*(const Vector3<T>& v, const Mat3& m)
 
 #if defined(STM32F407xx)
 template<>
-inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
+__attribute__((always_inline)) inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
 {
     static Vector3<float> u;
     mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&u);
@@ -115,7 +115,7 @@ inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
 }
 
 template<>
-inline Vector3<float>& operator*=(Vector3<float>& v, const Mat3& m)
+__attribute__((always_inline)) inline Vector3<float>& operator*=(Vector3<float>& v, const Mat3& m)
 {
     mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&v);
     return v;

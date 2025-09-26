@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 24-09-2025
+ * Last Modified: 26-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -59,7 +59,42 @@ public:
                        0.0f,         0.0f,         0.0f, 1.0f }
     {}
 
-    Mat4& operator=(const Mat4& m);
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
+    Mat4& operator=(const Mat4& m)
+    {
+        asm(R"(
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
+
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
+
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
+
+            EE.VLD.128.IP q0, a3, -48
+            EE.VST.128.IP q0, a2, -48
+        )");
+        return *this;
+    }
+#elif defined(STM32F407xx)
+    __attribute__((always_inline)) inline Mat4& operator=(const Mat4& m)
+    {
+    	// r0 - *this
+    	// r1 - m
+        asm volatile(
+            "vldm.32 %1, {s0-s15} \n\t"
+            "vstm.32 %0, {s0-s15} \n\t"
+            :
+            : "r" (this), "r" (&m)
+            : "s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7",
+            "s8", "s9", "s10", "s11", "s12", "s13", "s14", "s15"
+        );
+        return *this;
+    }
+#else
+    Mat4& operator=(const Mat4& m) = default;
+#endif
 
     Mat4& operator*=(float scalar);
 
@@ -199,7 +234,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
 
 #if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(STM32F407xx)
 template<>
-inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
+__attribute__((always_inline)) inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
 {
     static Vector4<float> u;
     mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&u);
@@ -207,7 +242,7 @@ inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
 }
 
 template<>
-inline Vector4<float>& operator*=(Vector4<float>& v, const Mat4& m)
+__attribute__((always_inline)) inline Vector4<float>& operator*=(Vector4<float>& v, const Mat4& m)
 {
     mult_1x4x4_asm((float*)&v, &m.data[0][0], (float*)&v);
     return v;
