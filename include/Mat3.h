@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 24-09-2025
+ * Last Modified: 29-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -41,18 +41,152 @@ public:
                a31, a32, a33 }
     {}
 
-    Mat3& operator=(const Mat3& m);
+    /**
+     * @brief  Scalar multiplication assignment
+     * 
+     * @param  scalar Scalar to multiply
+     * @return Mat3& Reference to this matrix
+     */
+    __attribute__((always_inline)) inline Mat3& operator*=(float scalar)
+    {
+        data[0][0] *= scalar;
+        data[0][1] *= scalar;
+        data[0][2] *= scalar;
+        data[1][0] *= scalar;
+        data[1][1] *= scalar;
+        data[1][2] *= scalar;
+        data[2][0] *= scalar;
+        data[2][1] *= scalar;
+        data[2][2] *= scalar;
+        return *this;
+    }
 
-    Mat3& operator*=(float scalar);
+    /**
+     * @brief Scalar multiplication
+     * 
+     * @param scalar Scalar to multiply
+     * @return Mat3 Result of the multiplication
+     */
+    __attribute__((always_inline)) inline Mat3 operator*(float scalar) const
+    {
+        return {
+            data[0][0] * scalar, data[0][1] * scalar, data[0][2] * scalar,
+            data[1][0] * scalar, data[1][1] * scalar, data[1][2] * scalar,
+            data[2][0] * scalar, data[2][1] * scalar, data[2][2] * scalar,
+        };
+    }
 
-    Mat3 operator*(float scalar) const;
-
+    /**
+     * @brief Matrix multiplication
+     * 
+     * @param m Matrix to multiply
+     * @return Mat3 Result of the multiplication
+     */
     Mat3& operator*=(const Mat3& m);
 
+    /**
+     * @brief Matrix multiplication
+     * 
+     * @param m Matrix to multiply
+     * @return Mat3 Result of the multiplication
+     */
     Mat3 operator*(const Mat3& m) const;
 
-    Mat3 operator!() const;
+    /**
+     * @brief Matrix addition
+     * 
+     * @param m Matrix to add
+     * @return Mat3 Result of the addition
+     */
+    __attribute__((always_inline)) inline Mat3 operator+(const Mat3& m) const
+    {
+        return {
+            data[0][0] + m.data[0][0], data[0][1] + m.data[0][1], data[0][2] + m.data[0][2],
+            data[1][0] + m.data[1][0], data[1][1] + m.data[1][1], data[1][2] + m.data[1][2],
+            data[2][0] + m.data[2][0], data[2][1] + m.data[2][1], data[2][2] + m.data[2][2],
+        };
+    }
 
+    /**
+     * @brief  Matrix addition assignment
+     * 
+     * @param m Matrix to add
+     * @return Mat3& Reference to this matrix
+     */
+    __attribute__((always_inline)) inline Mat3& operator+=(const Mat3& m)
+    {
+        data[0][0] += m.data[0][0];
+        data[0][1] += m.data[0][1];
+        data[0][2] += m.data[0][2];
+        data[1][0] += m.data[1][0];
+        data[1][1] += m.data[1][1];
+        data[1][2] += m.data[1][2];
+        data[2][0] += m.data[2][0];
+        data[2][1] += m.data[2][1];
+        data[2][2] += m.data[2][2];
+        return *this;
+    }
+
+    /**
+     * @brief Matrix subtraction
+     * 
+     * @param m Matrix to subtract
+     * @return Mat3 Result of the subtraction
+     */
+    __attribute__((always_inline)) inline Mat3 operator-(const Mat3& m) const
+    {
+        return {
+            data[0][0] - m.data[0][0], data[0][1] - m.data[0][1], data[0][2] - m.data[0][2],
+            data[1][0] - m.data[1][0], data[1][1] - m.data[1][1], data[1][2] - m.data[1][2],
+            data[2][0] - m.data[2][0], data[2][1] - m.data[2][1], data[2][2] - m.data[2][2],
+        };
+    }
+
+    /**
+     * @brief  Matrix subtraction assignment
+     * 
+     * @param m Matrix to subtract
+     * @return Mat3& Reference to this matrix
+     */
+    __attribute__((always_inline)) inline Mat3& operator-=(const Mat3& m)
+    {
+        data[0][0] -= m.data[0][0];
+        data[0][1] -= m.data[0][1];
+        data[0][2] -= m.data[0][2];
+        data[1][0] -= m.data[1][0];
+        data[1][1] -= m.data[1][1];
+        data[1][2] -= m.data[1][2];
+        data[2][0] -= m.data[2][0];
+        data[2][1] -= m.data[2][1];
+        data[2][2] -= m.data[2][2];
+        return *this;
+    }
+
+    /**
+     * @brief Transpose matrix
+     * 
+     * @return Mat3 
+     */
+    __attribute__((always_inline)) inline Mat3 operator!() const
+    {
+        return {
+            data[0][0], data[1][0], data[2][0],
+            data[0][1], data[1][1], data[2][1],
+            data[0][2], data[1][2], data[2][2],
+        };
+    }
+
+    __attribute__((always_inline)) inline float& operator()(int row, int col)
+    {
+        assert(row >= 0 && row < 3 && col >= 0 && col < 3 && "Mat3: row and col indices must be in [0,2]");
+        return data[row][col];
+    }
+
+    /**
+     * @brief  Identity matrix
+     * 
+     * @return constexpr Mat3   Return identity matrix
+     */
     constexpr static Mat3 Identity()
     {
         return {
@@ -62,6 +196,12 @@ public:
         };
     }
 
+    /**
+     * @brief Scaling matrix
+     * 
+     * @param factor Scale factor
+     * @return constexpr Mat3 
+     */
     constexpr static Mat3 Scaling(float factor)
     {
         return {
@@ -71,32 +211,74 @@ public:
         };
     }
 
+    /**
+     * @brief Scaling matrix
+     * 
+     * @param x Scale factor in X axis
+     * @param y Scale factor in Y axis
+     * @param z Scale factor in Z axis
+     * @return constexpr Mat3 
+     */
+    constexpr static Mat3 Scaling(float x, float y, float z)
+    {
+        return {
+            x,    0.0f, 0.0f,
+            0.0f, y,    0.0f,
+            0.0f, 0.0f, z,
+        };
+    }
+
+    /**
+     * @brief Rotation matrix around Z axis
+     * 
+     * @param theta Rotation angle in radians
+     * @return Mat3
+     */
     static Mat3 RotationZ(float theta);
 
+    /**
+     * @brief Rotation matrix around Y axis
+     * 
+     * @param theta Rotation angle in radians
+     * @return Mat3
+     */
     static Mat3 RotationY(float theta);
 
+    /**
+     * @brief Rotation matrix around X axis
+     * 
+     * @param theta Rotation angle in radians
+     * @return Mat3
+     */
     static Mat3 RotationX(float theta);
+
+    /**
+     * @brief Inverse matrix
+     * 
+     * @return Mat3 Inverted matrix. If the matrix is not invertible, returns zero matrix.
+     */
+    Mat3 Inverse() const;
+
+    /**
+     * @brief Determinant of the matrix
+     * 
+     * @return float Determinant value
+     */
+    float Determinant() const;
 
 public:
 	// [ row ][ col ]
 	float data[3][3] = {0};
 };
 
-// ASM functions
-#if defined(STM32F407xx)
-extern "C" void mult_3x3x3_asm(const float* A, const float* B, float* C);
-extern "C" void mult_1x3x3_asm(const float* v, const float* M, float* u);
-extern "C" void mult_3x3xS_asm(const float* A, const float* s, float* C);
-#endif
-
 template<typename T>
-Vector3<T>& operator*=(Vector3<T>& v, const Mat3& m)
+__attribute__((hot, optimize("O3"), always_inline)) inline Vector3<T>& operator*=(Vector3<T>& v, const Mat3& m)
 {
 	return v = v * m;
 }
 
 template<typename T>
-Vector3<T> operator*(const Vector3<T>& v, const Mat3& m)
+__attribute__((hot, optimize("O3"), always_inline)) inline Vector3<T> operator*(const Vector3<T>& v, const Mat3& m)
 {
 	return {
 		v.x * m.data[0][0] + v.y * m.data[1][0] + v.z * m.data[2][0],
@@ -104,22 +286,5 @@ Vector3<T> operator*(const Vector3<T>& v, const Mat3& m)
 		v.x * m.data[0][2] + v.y * m.data[1][2] + v.z * m.data[2][2]
 	};
 }
-
-#if defined(STM32F407xx)
-template<>
-inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
-{
-    static Vector3<float> u;
-    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&u);
-    return u;
-}
-
-template<>
-inline Vector3<float>& operator*=(Vector3<float>& v, const Mat3& m)
-{
-    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&v);
-    return v;
-}
-#endif
 
 #endif // MATRIX3_H

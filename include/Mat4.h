@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 24-09-2025
+ * Last Modified: 29-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -59,18 +59,207 @@ public:
                        0.0f,         0.0f,         0.0f, 1.0f }
     {}
 
-    Mat4& operator=(const Mat4& m);
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+    Mat4& operator=(const Mat4& m)
+        {
+        asm(R"(
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
 
-    Mat4& operator*=(float scalar);
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
 
-    Mat4 operator*(float scalar) const;
+            EE.VLD.128.IP q0, a3, 16
+            EE.VST.128.IP q0, a2, 16
 
+            EE.VLD.128.IP q0, a3, -48
+            EE.VST.128.IP q0, a2, -48
+        )");
+        return *this;
+    }
+#endif
+
+    /**
+     * @brief  Scalar multiplication assignment
+     * 
+     * @param  scalar Scalar to multiply
+     * @return Mat4& Reference to this matrix
+     */
+    Mat4& operator*=(float scalar)
+    {
+    #ifdef CONFIG_IDF_TARGET_ESP32S3
+        mult_4x4xS_asm(&data[0][0], &scalar, &data[0][0]);
+    #else
+        data[0][0] *= scalar;
+        data[0][1] *= scalar;
+        data[0][2] *= scalar;
+        data[0][3] *= scalar;
+        data[1][0] *= scalar;
+        data[1][1] *= scalar;
+        data[1][2] *= scalar;
+        data[1][3] *= scalar;
+        data[2][0] *= scalar;
+        data[2][1] *= scalar;
+        data[2][2] *= scalar;
+        data[2][3] *= scalar;
+        data[3][0] *= scalar;
+        data[3][1] *= scalar;
+        data[3][2] *= scalar;
+        data[3][3] *= scalar;
+    #endif
+        return *this;
+    }
+
+    /**
+     * @brief Scalar multiplication
+     * 
+     * @param scalar Scalar to multiply
+     * @return Mat4 Result of the multiplication
+     */
+    Mat4 operator*(float scalar) const
+    {
+    #ifdef CONFIG_IDF_TARGET_ESP32S3
+        Mat4 result;
+        mult_4x4xS_asm(&data[0][0], &scalar, &result.data[0][0]);
+        return result;
+    #else
+        return {
+            data[0][0] * scalar, data[0][1] * scalar, data[0][2] * scalar, data[0][3] * scalar,
+            data[1][0] * scalar, data[1][1] * scalar, data[1][2] * scalar, data[1][3] * scalar,
+            data[2][0] * scalar, data[2][1] * scalar, data[2][2] * scalar, data[2][3] * scalar,
+            data[3][0] * scalar, data[3][1] * scalar, data[3][2] * scalar, data[3][3] * scalar,
+        };
+    #endif
+    }
+
+    /**
+     * @brief Matrix multiplication
+     * 
+     * @param m Matrix to multiply
+     * @return Mat4 Result of the multiplication
+     */
     Mat4& operator*=(const Mat4& m);
 
+    /**
+     * @brief Matrix multiplication
+     * 
+     * @param m Matrix to multiply
+     * @return Mat4 Result of the multiplication
+     */
     Mat4 operator*(const Mat4& m) const;
 
-    Mat4 operator!() const;
+    /**
+     * @brief Matrix addition
+     * 
+     * @param m Matrix to add
+     * @return Mat4 Result of the addition
+     */
+    Mat4 operator+(const Mat4& m) const
+    {
+        return {
+            data[0][0] + m.data[0][0], data[0][1] + m.data[0][1], data[0][2] + m.data[0][2], data[0][3] + m.data[0][3],
+            data[1][0] + m.data[1][0], data[1][1] + m.data[1][1], data[1][2] + m.data[1][2], data[1][3] + m.data[1][3],
+            data[2][0] + m.data[2][0], data[2][1] + m.data[2][1], data[2][2] + m.data[2][2], data[2][3] + m.data[2][3],
+            data[3][0] + m.data[3][0], data[3][1] + m.data[3][1], data[3][2] + m.data[3][2], data[3][3] + m.data[3][3],
+        };
+    }
 
+    /**
+     * @brief  Matrix addition assignment
+     * 
+     * @param m Matrix to add
+     * @return Mat4& Reference to this matrix
+     */
+    Mat4& operator+=(const Mat4& m)
+    {
+        data[0][0] += m.data[0][0];
+        data[0][1] += m.data[0][1];
+        data[0][2] += m.data[0][2];
+        data[0][3] += m.data[0][3];
+        data[1][0] += m.data[1][0];
+        data[1][1] += m.data[1][1];
+        data[1][2] += m.data[1][2];
+        data[1][3] += m.data[1][3];
+        data[2][0] += m.data[2][0];
+        data[2][1] += m.data[2][1];
+        data[2][2] += m.data[2][2];
+        data[2][3] += m.data[2][3];
+        data[3][0] += m.data[3][0];
+        data[3][1] += m.data[3][1];
+        data[3][2] += m.data[3][2];
+        data[3][3] += m.data[3][3];
+        return *this;
+    }
+
+    /**
+     * @brief Matrix subtraction
+     * 
+     * @param m Matrix to subtract
+     * @return Mat4 Result of the subtraction
+     */
+    Mat4 operator-(const Mat4& m) const
+    {
+        return {
+            data[0][0] - m.data[0][0], data[0][1] - m.data[0][1], data[0][2] - m.data[0][2], data[0][3] - m.data[0][3],
+            data[1][0] - m.data[1][0], data[1][1] - m.data[1][1], data[1][2] - m.data[1][2], data[1][3] - m.data[1][3],
+            data[2][0] - m.data[2][0], data[2][1] - m.data[2][1], data[2][2] - m.data[2][2], data[2][3] - m.data[2][3],
+            data[3][0] - m.data[3][0], data[3][1] - m.data[3][1], data[3][2] - m.data[3][2], data[3][3] - m.data[3][3],
+        };
+    }
+
+    /**
+     * @brief  Matrix subtraction assignment
+     * 
+     * @param m Matrix to subtract
+     * @return Mat4& Reference to this matrix
+     */
+    Mat4& operator-=(const Mat4& m)
+    {
+        data[0][0] -= m.data[0][0];
+        data[0][1] -= m.data[0][1];
+        data[0][2] -= m.data[0][2];
+        data[0][3] -= m.data[0][3];
+        data[1][0] -= m.data[1][0];
+        data[1][1] -= m.data[1][1];
+        data[1][2] -= m.data[1][2];
+        data[1][3] -= m.data[1][3];
+        data[2][0] -= m.data[2][0];
+        data[2][1] -= m.data[2][1];
+        data[2][2] -= m.data[2][2];
+        data[2][3] -= m.data[2][3];
+        data[3][0] -= m.data[3][0];
+        data[3][1] -= m.data[3][1];
+        data[3][2] -= m.data[3][2];
+        data[3][3] -= m.data[3][3];
+        return *this;
+    }
+
+    /**
+     * @brief Transpose matrix
+     * 
+     * @return Mat4 
+     */
+    __attribute__((always_inline)) inline Mat4 operator!() const
+    {
+        return {
+            data[0][0], data[1][0], data[2][0], data[3][0],
+            data[0][1], data[1][1], data[2][1], data[3][1],
+            data[0][2], data[1][2], data[2][2], data[3][2],
+            data[0][3], data[1][3], data[2][3], data[3][3],
+        };
+    }
+
+    __attribute__((always_inline)) inline float& operator()(int row, int col)
+    {
+        assert(row >= 0 && row < 4 && col >= 0 && col < 4 && "Mat4: row and col indices must be in [0,3]");
+        return data[row][col];
+    }
+
+    /**
+     * @brief  Identity matrix
+     * 
+     * @return constexpr Mat4   Return identity matrix
+     */
     constexpr static Mat4 Identity()
     {
         return {
@@ -111,7 +300,7 @@ public:
     }
 
     /**
-     * @brief Rotation matrix arround Z axis
+     * @brief Rotation matrix around Z axis
      * 
      * @param theta Rotation angle in radians
      * @return Mat4 
@@ -119,7 +308,7 @@ public:
     static Mat4 RotationZ(float theta);
 
     /**
-     * @brief Rotation matrix arround Y axis
+     * @brief Rotation matrix around Y axis
      * 
      * @param theta Rotation angle in radians
      * @return Mat4 
@@ -127,7 +316,7 @@ public:
     static Mat4 RotationY(float theta);
 
     /**
-     * @brief Rotation matrix arround X axis
+     * @brief Rotation matrix around X axis
      * 
      * @param theta Rotation angle in radians
      * @return Mat4 
@@ -167,27 +356,36 @@ public:
             0.0f,         0.0f,         0.0f, 0.0f,
         };
     }
-    
+
+    /**
+     * @brief Inverse matrix
+     * 
+     * @return Mat4 Inverted matrix. If the matrix is not invertible, returns zero matrix.
+     */
+    Mat4 Inverse() const;
+
+    float Determinant() const;
+
 public:
     // [ row ][ col ]
     float data[4][4];
 };
 
 // ASM functions
-#if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(STM32F407xx)
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
 extern "C" void mult_4x4x4_asm(const float* A, const float* B, float* C);
 extern "C" void mult_1x4x4_asm(const float* v, const float* M, float* u);
 extern "C" void mult_4x4xS_asm(const float* A, const float* s, float* C);
 #endif
 
 template<typename T>
-Vector4<T>& operator*=(Vector4<T>& v, const Mat4& m)
+__attribute__((always_inline, hot, optimize("O3"))) inline Vector4<T>& operator*=(Vector4<T>& v, const Mat4& m)
 {
     return v = v * m;
 }
 
 template<typename T>
-Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
+__attribute__((always_inline, hot, optimize("O3"))) inline Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
 {
     return{
         v.x * m.data[0][0] + v.y * m.data[1][0] + v.z * m.data[2][0] + v.w * m.data[3][0],
@@ -197,7 +395,7 @@ Vector4<T> operator*(const Vector4<T>& v, const Mat4& m)
     };
 }
 
-#if defined(CONFIG_IDF_TARGET_ESP32S3) || defined(STM32F407xx)
+#if defined(CONFIG_IDF_TARGET_ESP32S3)
 template<>
 inline Vector4<float> operator*(const Vector4<float>& v, const Mat4& m)
 {
