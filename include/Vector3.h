@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-13
  * -----
- * Last Modified: 03-06-2023
+ * Last Modified: 29-09-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -270,7 +270,7 @@ inline float DistanceBetween(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T>
-inline float DistanceBetweenSquared (const Vector3<T> &v, const Vector3<T> &u)
+inline float DistanceBetweenSquared(const Vector3<T> &v, const Vector3<T> &u)
 {
     Vector3<T> distance = v - u;
     return distance.LengthSquared();
