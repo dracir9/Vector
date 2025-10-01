@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 30-09-2025
+ * Last Modified: 01-10-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -286,22 +286,5 @@ __attribute__((hot, optimize("O3"), always_inline)) inline Vector3<T> operator*(
 		v.x * m.data[0][2] + v.y * m.data[1][2] + v.z * m.data[2][2]
 	};
 }
-
-#if defined(STM32F407xx)
-template<>
-__attribute__((always_inline)) inline Vector3<float> operator*(const Vector3<float>& v, const Mat3& m)
-{
-    static Vector3<float> u;
-    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&u);
-    return u;
-}
-
-template<>
-__attribute__((always_inline)) inline Vector3<float>& operator*=(Vector3<float>& v, const Mat3& m)
-{
-    mult_1x3x3_asm((float*)&v, &m.data[0][0], (float*)&v);
-    return v;
-}
-#endif
 
 #endif // MATRIX3_H
