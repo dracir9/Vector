@@ -200,8 +200,7 @@ template <class T, class U>
 inline Vector2<T> operator/(const Vector2<T> &v, const U scalar)
 {
     assert(scalar != 0);
-    scalar = 1.0f / scalar;
-    return Vector2<T>(v.x*scalar, v.y*scalar);
+    return Vector2<T>(v.x/scalar, v.y/scalar);
 }
 
 template <class T, class U>

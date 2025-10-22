@@ -238,8 +238,7 @@ template <class T, class U>
 inline Vector4<T> operator/(const Vector4<T> &v, const U scalar)
 {
     assert(scalar != 0);
-    scalar = 1.0f / scalar;
-    return Vector4<T>(v.x*scalar, v.y*scalar, v.z*scalar, v.w*scalar);
+    return Vector4<T>(v.x/scalar, v.y/scalar, v.z/scalar, v.w/scalar);
 }
 
 template <class T>
