@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-13
  * -----
- * Last Modified: 03-06-2023
+ * Last Modified: 22-10-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -86,9 +86,8 @@ public:
     Vector2<T> &operator /= (const U scalar)
     {
         assert(scalar != 0);
-        scalar = 1.0f / scalar;
-        x *= scalar;
-        y *= scalar;
+        x /= scalar;
+        y /= scalar;
         return *this;
     }
 
@@ -99,7 +98,7 @@ public:
         return *this;
     }
 
-    T &operator [] (const int i)
+    constexpr T &operator [] (const int i) const
     {
         if (i == 0) {
             return x;
@@ -114,17 +113,17 @@ public:
     //******************************************************************
     //* Methods
     //******************************************************************
-    bool IsZero()
+    bool IsZero() const
     {
         return !(x || y);
     }
 
-    T LengthSquared()
+    T LengthSquared() const
     {
         return x*x + y*y;
     }
 
-    float Length()
+    float Length() const
     {
         return sqrtf((float)LengthSquared());
     }
@@ -140,7 +139,7 @@ public:
         y *= len;
     }
 
-    bool IsNormalized()
+    bool IsNormalized() const
     {
         return Length() == 1.0f;
     }

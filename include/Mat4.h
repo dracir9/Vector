@@ -3,7 +3,7 @@
  * @author: Ricard Bitriá Ribes (https://github.com/dracir9)
  * Created Date: 2021-11-14
  * -----
- * Last Modified: 30-09-2025
+ * Last Modified: 22-10-2025
  * Modified By: Ricard Bitriá Ribes
  * -----
  * @copyright (c) 2021 Ricard Bitriá Ribes
@@ -249,7 +249,7 @@ public:
         };
     }
 
-    __attribute__((always_inline)) inline float& operator()(int row, int col)
+    __attribute__((always_inline)) inline float& operator()(const int row, const int col)
     {
         assert(row >= 0 && row < 4 && col >= 0 && col < 4 && "Mat4: row and col indices must be in [0,3]");
         return data[row][col];
