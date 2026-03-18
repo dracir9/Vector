@@ -28,10 +28,15 @@
 #include "Vector2.h"
 #include <cmath>
 #include <cassert>
+#include <cstddef>
 
 //**********************************************************************
 //* 3 dimensional vector (X,Y,Z)
 //**********************************************************************
+/**
+ * @brief 3D vector with public x/y/z components.
+ * @tparam T component type.
+ */
 template <class T>
 class Vector3 : public Vector2<T>
 {
@@ -41,15 +46,21 @@ public:
     //******************************************************************
     //* Constructors
     //******************************************************************
+    /** @brief Default constructor. Components are left uninitialized. */
     Vector3() = default;
+
+    /** @brief Construct from explicit x/y/z values. */
     constexpr Vector3(T x, T y, T z) : Vector2<T>::Vector2(x, y), z(z) {}
 
+    /** @brief Construct with all components set to the same scalar. */
     constexpr Vector3(const T &s) : Vector2<T>::Vector2(s), z(s) {}
 
     template <class U>
+    /** @brief Converting copy constructor. */
     constexpr Vector3(const Vector3<U> &v) : Vector2<T>::Vector2(v.x, v.y), z(v.z) {}
 
     template <class U>
+    /** @brief Build from a 2D vector plus z component. */
     constexpr Vector3(const Vector2<U> &v, T z) : Vector2<T>::Vector2(v), z(z) {}
     //******************************************************************
 
@@ -57,6 +68,7 @@ public:
     //* Operators
     //******************************************************************
     template <class U>
+    /** @brief Assign from vector with possibly different component type. */
     Vector3<T> &operator = (const Vector3<U> &v)
     {
         x = v.x;
@@ -66,6 +78,7 @@ public:
     }
 
     template <class U>
+    /** @brief Component-wise addition assignment. */
     Vector3<T> &operator += (const Vector3<U> &v)
     {
         x += v.x;
@@ -75,6 +88,7 @@ public:
     }
 
     template <class U>
+    /** @brief Component-wise subtraction assignment. */
     Vector3<T> &operator -= (const Vector3<U> &v)
     {
         x -= v.x;
@@ -84,6 +98,7 @@ public:
     }
 
     template <class U>
+    /** @brief Scalar multiplication assignment. */
     Vector3<T> &operator *= (U scalar)
     {
         x *= scalar;
@@ -93,6 +108,7 @@ public:
     }
 
     template <class U>
+    /** @brief Scalar division assignment. */
     Vector3<T> &operator /= (U scalar)
     {
         assert(scalar != 0);
@@ -102,6 +118,7 @@ public:
         return *this;
     }
 
+    /** @brief Unary minus in-place. */
     Vector3<T> &operator - ()
     {
         x = -x;
@@ -110,39 +127,43 @@ public:
         return *this;
     }
 
-    constexpr T &operator [] (const int i) const
+    /** @brief Indexed component access (0 -> x, 1 -> y, 2 -> z). */
+    constexpr T &operator [] (const size_t i)
     {
-        if (i == 0) {
-            return x;
-        } else if (i == 1) {
-            return y;
-        } else if (i == 2) {
-            return z;
-        } else {
-            assert("[] Access error!");
-        }
-        return x;
+        assert(i < 3 && "[] Access error!");
+        return (i == 0) ? x : ((i == 1) ? y : z);
+    }
+
+    /** @brief Indexed component access for const vectors. */
+    constexpr const T &operator [] (const size_t i) const
+    {
+        assert(i < 3 && "[] Access error!");
+        return (i == 0) ? x : ((i == 1) ? y : z);
     }
     //******************************************************************
 
     //******************************************************************
     //* Methods
     //******************************************************************
+    /** @brief True if all components are numerically zero. */
     bool IsZero() const
     {
         return !(x || y || z);
     }
 
+    /** @brief Squared Euclidean length. */
     float LengthSquared() const
     {
         return x*x + y*y + z*z;
     }
 
+    /** @brief Euclidean length. */
     float Length() const
     {
-        return sqrtf(LengthSquared());
+        return std::sqrt(LengthSquared());
     }
     
+    /** @brief Normalize vector in place. */
     void Normalize()
     {
         float magnitude = Length();
@@ -155,9 +176,11 @@ public:
         z *= magnitude;
     }
 
+    /** @brief True if vector length is approximately one. */
     bool IsNormalized() const
     {
-        return Length() == 1.0f;
+        const float epsilon = 1e-5f;
+        return std::fabs(Length() - 1.0f) <= epsilon;
     }
     //******************************************************************
 
@@ -168,6 +191,7 @@ public:
 //* Vector3
 //**********************************************************************
 template <class T>
+/** @brief Exact equality comparison (component-wise). */
 inline bool operator==(const Vector3<T> &v, const Vector3<T> &u)
 {
     return (v.x == u.x &&
@@ -176,6 +200,7 @@ inline bool operator==(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T>
+/** @brief Exact inequality comparison (component-wise). */
 inline bool operator!=(const Vector3<T> &v, const Vector3<T> &u)
 {
     return (v.x != u.x ||
@@ -184,36 +209,42 @@ inline bool operator!=(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T, class U>
+/** @brief Component-wise vector addition. */
 inline Vector3<T> operator+(const Vector3<T> &v, const Vector3<U> &u)
 {
     return Vector3<T>(v.x+u.x, v.y+u.y, v.z+u.z);
 }
 
 template <class T, class U>
+/** @brief Component-wise vector subtraction. */
 inline Vector3<T> operator-(const Vector3<T> &v,const Vector3<U> &u)
 {
     return Vector3<T>(v.x-u.x, v.y-u.y, v.z-u.z);
 }
 
 template <class T, class U>
+/** @brief Vector multiplied by scalar. */
 inline Vector3<T> operator*(const Vector3<T> &v, const U scalar)
 {
     return Vector3<T>(v.x*scalar, v.y*scalar, v.z*scalar);
 }
 
 template <class T, class U>
+/** @brief Scalar multiplied by vector. */
 inline Vector3<T> operator*(const U scalar, const Vector3<T> &v)
 {
     return Vector3<T>(v.x*scalar, v.y*scalar, v.z*scalar);
 }
 
 template <class T, class U>
+/** @brief Dot product. */
 inline float operator*(const Vector3<T> &v, const Vector3<U> &u)
 {
     return v.x*u.x + v.y*u.y + v.z*u.z;
 }
 
 template <class T, class U>
+/** @brief Vector divided by scalar. */
 inline Vector3<T> operator/(const Vector3<T> &v, const U scalar)
 {
     assert(scalar != 0);
@@ -221,6 +252,7 @@ inline Vector3<T> operator/(const Vector3<T> &v, const U scalar)
 }
 
 template <class T, class U>
+/** @brief 3D cross product. */
 inline Vector3<T> CrossProduct(const Vector3<T> &v, const Vector3<U> &u)
 {
     return Vector3<T>(v.y*u.z - v.z*u.y,
@@ -229,14 +261,16 @@ inline Vector3<T> CrossProduct(const Vector3<T> &v, const Vector3<U> &u)
 }
 
 template <class T>
+/** @brief Linear interpolation from v to u. */
 inline Vector3<T> Lerp(const Vector3<T> &v, const Vector3<T> &u, const float t)
 {
-    return Vector3<float>(v.x + (u.x - v.x) * t,
-                          v.y + (u.y - v.y) * t,
-                          v.z + (u.z - v.z) * t);
+    return Vector3<T>(v.x + (u.x - v.x) * t,
+                      v.y + (u.y - v.y) * t,
+                      v.z + (u.z - v.z) * t);
 }
 
 template <class T>
+/** @brief Clamp each component to [min, max]. */
 inline Vector3<T> Clamp(const Vector3<T> &v, const T min, const T max)
 {
     return Vector3<T>(v.x < min ? min : (v.x > max ? max : v.x),
@@ -245,6 +279,7 @@ inline Vector3<T> Clamp(const Vector3<T> &v, const T min, const T max)
 }
 
 template <class T>
+/** @brief Component-wise minimum. */
 inline Vector3<T> min(const Vector3<T> &v, const Vector3<T> &u)
 {
     return Vector3<T>(v.x < u.x ? v.x : u.x,
@@ -253,6 +288,7 @@ inline Vector3<T> min(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T>
+/** @brief Component-wise maximum. */
 inline Vector3<T> max(const Vector3<T> &v, const Vector3<T> &u)
 {
     return Vector3<T>(v.x > u.x ? v.x : u.x,
@@ -261,6 +297,7 @@ inline Vector3<T> max(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T>
+/** @brief Euclidean distance between two vectors. */
 inline float DistanceBetween(const Vector3<T> &v, const Vector3<T> &u)
 {
     Vector3<T> distance = v - u;
@@ -268,6 +305,7 @@ inline float DistanceBetween(const Vector3<T> &v, const Vector3<T> &u)
 }
 
 template <class T>
+/** @brief Squared Euclidean distance between two vectors. */
 inline float DistanceBetweenSquared(const Vector3<T> &v, const Vector3<T> &u)
 {
     Vector3<T> distance = v - u;
